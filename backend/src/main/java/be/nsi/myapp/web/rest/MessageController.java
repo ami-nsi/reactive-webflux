@@ -31,18 +31,16 @@ public class MessageController {
     @CrossOrigin
     @GetMapping(value = "/flux", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Message> allMessage() {
+        // Create the message flux
         Flux<Message> eventFlux = Flux.fromStream(
-            Stream.generate(()-> {
-                String content = "Message " + System.currentTimeMillis();
-                System.out.println(content);
-                return new Message(content);
-            })
+            // Generate a new message containing the current timestamp
+            Stream.generate(()-> new Message("Message " + System.currentTimeMillis()))
         );
 
+        // Create a 1sec interval
         Flux<Long> durationFlux = Flux.interval(Duration.ofSeconds(1));
 
+        // Synchronise the interval and the message generator
         return Flux.zip(eventFlux, durationFlux).map(Tuple2::getT1);
-
-//        return Flux.just(new Message("Fake flux 1"), new Message("Fake flux 2"));
     }
 }
