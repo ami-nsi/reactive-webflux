@@ -1,0 +1,17 @@
+<h1>{{ "hello-world" | translate }}</h1>
+<p>{{ "test-key" | translate }}</p>
+
+<button (click)="callMono()">Mono</button>
+<button (click)="callFlux()">Flux</button>
+<button *ngIf="sub" (click)="unsub()">Unsub</button>
+
+<div>
+  <h1>Last:</h1>
+  <div>
+    {{ lastMessage | json }}
+  </div>
+  <h1>All:</h1>
+  <div>
+    {{ allMessages | json }}
+  </div>
+</div>

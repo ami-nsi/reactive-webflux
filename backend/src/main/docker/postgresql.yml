@@ -1,0 +1,11 @@
+version: '2'
+services:
+  myapp-postgresql:
+    image: postgres:11.6
+    # volumes:
+    #     - ~/volumes/jhipster/myapp/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=myapp
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432

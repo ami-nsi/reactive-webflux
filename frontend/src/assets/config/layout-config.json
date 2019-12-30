@@ -1,0 +1,17 @@
+{
+  "layoutCompact": true,
+  "layoutMode": "SLIM",
+  "darkMenu": true,
+  "profileMode": "inline",
+  "profileView": true,
+  "demoMenu": true,
+  "layoutMenu": true,
+  "globalSearch": true,
+  "footerView": true,
+  "settingsView": true,
+  "msgView": true,
+  "notiView": true,
+  "rightPanel": true,
+  "breadcrumb": true,
+  "avatar": "avatar.png"
+}

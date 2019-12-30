@@ -1,0 +1,17 @@
+$body-bg: #F1F2F2 !default; // #f7f7f7
+$loader-bg: white;
+$primary-color: #0098C3;
+$warm-color: #D12F30;
+$accentColor: #F37160;
+
+$logo-nsi-color1 : #0098C3;
+$logo-nsi-color2 : #90D5DF;
+$logo-nsi-color3 : #4C9FCE;
+$logo-nsi-color4 : #F04B4C;
+$logo-nsi-color5 : #69266F;
+
+$images-path: 'assets/images' !default; // #{$images-path}
+$app-logo:"#{$images-path}/nsi_white_2018_final.png";
+$loader-logo:"#{$images-path}/nsi_logo_2018_final.png";
+
+@import 'template/variables';

@@ -1,0 +1,15 @@
+application {
+  config {
+    baseName myapp
+    packageName be.nsi.myapp
+    applicationType monolith
+    databaseType sql
+    devDatabaseType postgresql
+    prodDatabaseType postgresql
+    buildTool maven
+    skipClient true
+    skipUserManagement true
+    entitySuffix Entity
+    dtoSuffix false
+  }
+}

@@ -1,0 +1,85 @@
+@import "variables";
+
+body {
+  background-color: $body-bg;
+}
+
+// Loader
+.splash-screen {
+  background-color: $loader-bg;
+
+  // Loader logo
+  .logo {
+    background: url($loader-logo) top left no-repeat;
+    // Set logo size
+    width: 300px;
+    height: 150px;
+    background-size: 300px 150px;
+    margin-bottom: 15px;
+  }
+
+  // Loader circle color
+  @keyframes colors {
+    0% {
+      stroke: $logo-nsi-color1;
+    }
+
+    25% {
+      stroke: $logo-nsi-color2;
+    }
+
+    50% {
+      stroke: $logo-nsi-color3;
+    }
+
+    75% {
+      stroke: $logo-nsi-color4;
+    }
+
+    100% {
+      stroke: $logo-nsi-color5;
+    }
+  }
+}
+
+.splash-loader-container {
+  top:40%;
+
+  // If logo : width/2
+  margin-left: -175px;
+}
+
+
+// Header
+.layout-container .topbar .logo {
+  position: relative;
+  top: -12px;
+  left: 0;
+  background: url($app-logo) top left no-repeat;
+  background-size: auto 60px;
+  height: 60px;
+}
+
+// Footer
+//.footer {
+//  .card {
+//    background-color: $primary-color;
+//
+//    span {
+//      color: white;
+//    }
+//  }
+//}
+
+
+// Badge
+.menuitem-badge,
+.topbar-badge {
+  background-color: $accentColor !important;
+  color: white !important;
+}
+
+.layout-container .layout-menu.layout-menu-dark ul.ultima-menu li.active-menuitem > a,
+.layout-container .topbar .topbar-right #menu-button {
+  color: white;
+}
