@@ -29,6 +29,8 @@ export class HomeComponent implements OnInit {
   callFlux() {
     this.sub = this.messageService.getAllMessages().subscribe(
       v => {
+        // Use zone to update the value
+        // Otherwise the detection is not triggered
         this._zone.run(() => (this.allMessages = v));
       },
       e => console.error("Error", e)
@@ -36,6 +38,6 @@ export class HomeComponent implements OnInit {
   }
 
   unsub() {
-    this.sub.unsubscribe();
+    this.sub && this.sub.unsubscribe();
   }
 }
