@@ -20,18 +20,14 @@ const MODULES: any[] = [
   RouterModule,
   TranslateModule,
   ScrollPanelModule,
-  InputTextModule
+  InputTextModule,
 ];
 
-const DECLARATIONS: any[] = [
-  PropercasePipe,
-  PageHeaderComponent
-];
-
+const DECLARATIONS: any[] = [PropercasePipe, PageHeaderComponent];
 
 @NgModule({
   imports: MODULES,
   declarations: DECLARATIONS,
-  exports: [...MODULES, ...DECLARATIONS]
+  exports: [...MODULES, ...DECLARATIONS],
 })
-export class SharedModule { }
+export class SharedModule {}

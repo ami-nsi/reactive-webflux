@@ -9,24 +9,13 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+const MODULES: any[] = [CoreModule, SharedModule, FeaturesModule, LayoutsModule, AppRoutingModule];
 
-const MODULES: any[] = [
-  CoreModule,
-  SharedModule,
-  FeaturesModule,
-  LayoutsModule,
-  AppRoutingModule
-];
-
-
-const DECLARATIONS: any[] = [
-  AppComponent
-];
-
+const DECLARATIONS: any[] = [AppComponent];
 
 @NgModule({
   imports: MODULES,
   declarations: DECLARATIONS,
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

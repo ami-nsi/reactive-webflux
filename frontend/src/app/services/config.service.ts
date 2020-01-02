@@ -6,9 +6,7 @@ import { LOGGER } from './logger.service';
 export class ConfigService {
   [key: string]: any;
 
-  constructor(
-    private http: HttpClient
-  ) {
+  constructor(private http: HttpClient) {
     this[`app`] = {};
   }
 
@@ -21,7 +19,7 @@ export class ConfigService {
   }
 
   get(key: string, def: any = null): any {
-    const value = key.split('.').reduce((o, i) => (o !== undefined && o != null) ? o[i] : null, this);
-    return (value !== null && value !== undefined ? value : def);
+    const value = key.split('.').reduce((o, i) => (o !== undefined && o != null ? o[i] : null), this);
+    return value !== null && value !== undefined ? value : def;
   }
 }

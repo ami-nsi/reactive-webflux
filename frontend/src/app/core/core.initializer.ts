@@ -42,7 +42,6 @@ export async function init(injector: Injector): Promise<void> {
   addSplashItem('Finishing core initialization');
 }
 
-
 export function addSplashItem(txt: string): void {
   const el: any = document.querySelector('#splash-text ul');
   if (el) {

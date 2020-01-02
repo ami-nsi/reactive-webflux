@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
         <small *ngIf="subtitle">{{ subtitle }}</small>
       </h1>
     </header>
-    `
+  `,
 })
 export class PageHeaderComponent {
   @Input() title: string;

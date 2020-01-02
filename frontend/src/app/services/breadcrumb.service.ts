@@ -4,7 +4,6 @@ import { MenuItem } from 'primeng/primeng';
 
 @Injectable({ providedIn: 'root' })
 export class BreadcrumbService {
-
   private itemsSource = new Subject<MenuItem[]>();
 
   itemsHandler = this.itemsSource.asObservable();

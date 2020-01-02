@@ -1,13 +1,13 @@
-import { Injectable, NgZone } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, throwError, BehaviorSubject, Subscriber } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
+import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError, BehaviorSubject, Subscriber } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class MessageService {
-  private serviceUrl = "//localhost:8080/messages";
+  private serviceUrl = '//localhost:8080/messages';
 
   private _eventSource: EventSource;
   private _events: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -15,15 +15,13 @@ export class MessageService {
   constructor(private http: HttpClient) {}
 
   getLastMessage(): Observable<any> {
-    return this.http
-      .get(this.serviceUrl + "/mono")
-      .pipe(tap(r => console.log("Got a result from backend", r)));
+    return this.http.get(this.serviceUrl + '/mono').pipe(tap(r => console.log('Got a result from backend', r)));
   }
 
   getAllMessages(): Observable<any> {
     return new Observable(subscriber => {
       // Create websoquet from EventSource
-      const eventSource = new EventSource(this.serviceUrl + "/flux");
+      const eventSource = new EventSource(this.serviceUrl + '/flux');
 
       // Trigger behavioural subject on message received
       eventSource.onmessage = sse => {

@@ -1,22 +1,20 @@
-import {AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LayoutConfig} from '@app/models/layout-config.model';
-import {ConfigService} from '@app/services/config.service';
-import {ScrollPanel} from 'primeng/scrollpanel';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { LayoutConfig } from '@app/models/layout-config.model';
+import { ConfigService } from '@app/services/config.service';
+import { ScrollPanel } from 'primeng/scrollpanel';
 
 enum MenuOrientation {
   STATIC,
   OVERLAY,
   SLIM,
-  HORIZONTAL
+  HORIZONTAL,
 }
-
 
 @Component({
   selector: 'app-layout',
-  templateUrl: './layout.component.html'
+  templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
-
   // Custom NSI
   layout: LayoutConfig;
 
@@ -56,9 +54,9 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
 
   menuHoverActive: boolean;
 
-  @ViewChild('layoutContainer', {static: false}) layourContainerViewChild: ElementRef;
+  @ViewChild('layoutContainer', { static: false }) layourContainerViewChild: ElementRef;
 
-  @ViewChild('scrollPanel', {static: false}) layoutMenuScrollerViewChild: ScrollPanel;
+  @ViewChild('scrollPanel', { static: false }) layoutMenuScrollerViewChild: ScrollPanel;
 
   rippleInitListener: any;
 
@@ -67,7 +65,9 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public config: ConfigService, public zone: NgZone) {}
 
   ngOnInit(): void {
-    this.zone.runOutsideAngular(() => {this.bindRipple(); });
+    this.zone.runOutsideAngular(() => {
+      this.bindRipple();
+    });
 
     // Custom NSI -Init Ultima Layout
     this.layout = this.config.layout;
@@ -95,7 +95,12 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       // Element.matches() -> https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
-      if (this.selectorMatches(target, '.ripplelink, .ui-button, .ui-listbox-item, .ui-multiselect-item, .ui-fieldset-toggler')) {
+      if (
+        this.selectorMatches(
+          target,
+          '.ripplelink, .ui-button, .ui-listbox-item, .ui-multiselect-item, .ui-fieldset-toggler'
+        )
+      ) {
         const element = target;
         this.rippleEffect(element, e);
         break;
@@ -109,9 +114,14 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     const mozMatchesSelector = 'mozMatchesSelector';
     const msMatchesSelector = 'msMatchesSelector';
     const p = Element.prototype;
-    const f = p[matches] || p[webkitMatchesSelector] || p[mozMatchesSelector] || p[msMatchesSelector] || function(s) {
-      return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
-    };
+    const f =
+      p[matches] ||
+      p[webkitMatchesSelector] ||
+      p[mozMatchesSelector] ||
+      p[msMatchesSelector] ||
+      function(s) {
+        return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+      };
     return f.call(el, selector);
   }
 
@@ -125,7 +135,7 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       this.addClass(inkEl, 'ink');
 
       if (this.hasClass(element, 'ripplelink') && element.querySelector('span')) {
-        element.querySelector('span').insertAdjacentHTML('afterend', '<span class=\'ink\'></span>');
+        element.querySelector('span').insertAdjacentHTML('afterend', "<span class='ink'></span>");
       } else {
         element.appendChild(inkEl);
       }
@@ -140,8 +150,8 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       ink.style.width = d + 'px';
     }
 
-    const x = e.pageX - this.getOffset(element).left - (ink.offsetWidth / 2);
-    const y = e.pageY - this.getOffset(element).top - (ink.offsetHeight / 2);
+    const x = e.pageX - this.getOffset(element).left - ink.offsetWidth / 2;
+    const y = e.pageY - this.getOffset(element).top - ink.offsetHeight / 2;
 
     ink.style.top = y + 'px';
     ink.style.left = x + 'px';
@@ -168,7 +178,10 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     if (element.classList) {
       element.classList.remove(className);
     } else {
-      element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      element.className = element.className.replace(
+        new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'),
+        ' '
+      );
     }
   }
 
@@ -191,8 +204,10 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.layoutContainer = this.layourContainerViewChild.nativeElement as HTMLDivElement ;
-    setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 100);
+    this.layoutContainer = this.layourContainerViewChild.nativeElement as HTMLDivElement;
+    setTimeout(() => {
+      this.layoutMenuScrollerViewChild.moveBar();
+    }, 100);
   }
 
   onLayoutClick() {
@@ -231,8 +246,10 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       this.overlayMenuActive = !this.overlayMenuActive;
     } else {
       if (this.isDesktop()) {
-        this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive; } else {
-        this.staticMenuMobileActive = !this.staticMenuMobileActive; }
+        this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive;
+      } else {
+        this.staticMenuMobileActive = !this.staticMenuMobileActive;
+      }
     }
 
     event.preventDefault();
@@ -256,8 +273,10 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     this.topbarItemClick = true;
 
     if (this.activeTopbarItem === item) {
-      this.activeTopbarItem = null; } else {
-      this.activeTopbarItem = item; }
+      this.activeTopbarItem = null;
+    } else {
+      this.activeTopbarItem = item;
+    }
 
     event.preventDefault();
   }
@@ -326,5 +345,4 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.unbindRipple();
   }
-
 }

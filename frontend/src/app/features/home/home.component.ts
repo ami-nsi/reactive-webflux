@@ -1,11 +1,11 @@
-import { Component, OnInit, NgZone } from "@angular/core";
-import { MessageService } from "@app/services/message.service";
-import { Subscription } from "rxjs";
+import { Component, OnInit, NgZone } from '@angular/core';
+import { MessageService } from '@app/services/message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"]
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
   public lastMessage: any;
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
       v => {
         this._zone.run(() => (this.lastMessage = v));
       },
-      e => console.error("Error", e)
+      e => console.error('Error', e)
     );
   }
 
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
         // Otherwise the detection is not triggered
         this._zone.run(() => (this.allMessages = v));
       },
-      e => console.error("Error", e)
+      e => console.error('Error', e)
     );
   }
 
