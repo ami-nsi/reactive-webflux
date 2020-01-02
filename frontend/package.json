@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.14",
+    "@angular/cdk": "~8.1.2",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",
@@ -21,13 +22,12 @@
     "@angular/router": "~8.2.14",
     "@ngx-translate/core": "~11.0.1",
     "@nsi/primeng-ultima": "^8.0.0",
+    "animate.css": "~3.7.2",
+    "primeng": "~8.0.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "whatwg-fetch": "~3.0.0",
-    "zone.js": "~0.9.1",
-    "@angular/cdk": "~8.1.2",
-    "animate.css": "~3.7.2",
-    "primeng": "~8.0.2"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.21",
