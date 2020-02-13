@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject, Subscriber } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, Subscriber, Subject, Observer } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -9,22 +9,24 @@ import { tap, catchError } from 'rxjs/operators';
 export class MessageService {
   private serviceUrl = '//localhost:8080/messages';
 
-  private _eventSource: EventSource;
-  private _events: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
   constructor(private http: HttpClient) {}
 
-  getLastMessage(): Observable<any> {
-    return this.http.get(this.serviceUrl + '/mono').pipe(tap(r => console.log('Got a result from backend', r)));
+  create(message): Observable<any> {
+    return this.http.post(this.serviceUrl, message);
   }
 
-  getAllMessages(): Observable<any> {
+  private getFluxObervable<T>(url: string): Observable<T> {
     return new Observable(subscriber => {
       // Create websoquet from EventSource
-      const eventSource = new EventSource(this.serviceUrl + '/flux');
+      const eventSource = new EventSource(url, { withCredentials: false });
+
+      eventSource.onopen = conn => {
+        console.log('Open', conn);
+      };
 
       // Trigger behavioural subject on message received
       eventSource.onmessage = sse => {
+        console.log('received message', sse);
         const event: any = JSON.parse(sse.data);
         // Requiered zone to trigger angular view change
         // this._zone.run(() => this._events.next(event));
@@ -32,14 +34,45 @@ export class MessageService {
       };
 
       // Trigger error on error
-      eventSource.onerror = err => subscriber.error(err);
+      eventSource.onerror = err => {
+        console.error('received error');
+        subscriber.error(err);
+      };
 
       // Override subscribe method to close the event source too
       const originalUsub = subscriber.unsubscribe;
       subscriber.unsubscribe = () => {
+        console.log('Unsubscribe');
         eventSource.close();
         originalUsub.call(subscriber);
       };
     });
+  }
+
+  private createWs<T>(url: string): Subject<T> {
+    const ws = new WebSocket(url);
+
+    const observable = Observable.create((obs: Observer<T>) => {
+      ws.onmessage = obs.next.bind(obs);
+      ws.onerror = obs.error.bind(obs);
+      ws.onclose = obs.complete.bind(obs);
+
+      return ws.close.bind(ws);
+    });
+
+    const observer = {
+      next: (data: object) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify(data));
+        }
+      },
+    };
+
+    return Subject.create(observer, observable);
+  }
+
+  getLastMessage(): Observable<any> {
+    // return this.createWs(this.serviceUrl + '/flux');
+    return this.getFluxObervable(this.serviceUrl + '/flux');
   }
 }

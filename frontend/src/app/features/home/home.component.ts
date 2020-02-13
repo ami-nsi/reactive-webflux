@@ -13,31 +13,34 @@ export class HomeComponent implements OnInit {
 
   public sub: Subscription;
 
-  constructor(private messageService: MessageService, private _zone: NgZone) {}
+  constructor(private messageService: MessageService, private zone: NgZone) {}
 
-  ngOnInit() {}
-
-  callMono() {
-    this.messageService.getLastMessage().subscribe(
-      v => {
-        this._zone.run(() => (this.lastMessage = v));
-      },
-      e => console.error('Error', e)
-    );
+  ngOnInit() {
+    this.listenLastMessage();
   }
 
-  callFlux() {
-    this.sub = this.messageService.getAllMessages().subscribe(
+  listenLastMessage() {
+    this.sub = this.messageService.getLastMessage().subscribe(
       v => {
         // Use zone to update the value
         // Otherwise the detection is not triggered
-        this._zone.run(() => (this.allMessages = v));
+        this.zone.run(() => (this.lastMessage = v));
+        console.log('New message', v);
       },
-      e => console.error('Error', e)
+      e => {
+        console.error('Error', e);
+        this.lastMessage = e;
+      },
+      () => console.log('On complete')
     );
   }
 
   unsub() {
     this.sub && this.sub.unsubscribe();
+  }
+
+  create(content: string) {
+    const message = { content };
+    this.messageService.create(message).subscribe(m => console.log('Created'));
   }
 }

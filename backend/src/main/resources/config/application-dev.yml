@@ -17,7 +17,7 @@ logging:
   level:
     ROOT: DEBUG
     io.github.jhipster: DEBUG
-    be.nsi.myapp: DEBUG
+    be.nsi.myapp: INFO
 
 spring:
   profiles:
