@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   constructor(private messageService: MessageService, private zone: NgZone) {}
 
   ngOnInit() {
+    this.allMessages = [];
     this.listenLastMessage();
   }
 
@@ -24,13 +25,12 @@ export class HomeComponent implements OnInit {
       v => {
         // Use zone to update the value
         // Otherwise the detection is not triggered
-        this.zone.run(() => (this.lastMessage = v));
-        console.log('New message', v);
+        this.zone.run(() => {
+          this.lastMessage = v;
+          this.allMessages.push(v);
+        });
       },
-      e => {
-        console.error('Error', e);
-        this.lastMessage = e;
-      },
+      e => (this.lastMessage = e),
       () => console.log('On complete')
     );
   }
@@ -41,6 +41,6 @@ export class HomeComponent implements OnInit {
 
   create(content: string) {
     const message = { content };
-    this.messageService.create(message).subscribe(m => console.log('Created'));
+    this.messageService.create(message).subscribe(m => console.log('Created', m));
   }
 }

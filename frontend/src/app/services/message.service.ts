@@ -20,13 +20,8 @@ export class MessageService {
       // Create websoquet from EventSource
       const eventSource = new EventSource(url, { withCredentials: false });
 
-      eventSource.onopen = conn => {
-        console.log('Open', conn);
-      };
-
       // Trigger behavioural subject on message received
       eventSource.onmessage = sse => {
-        console.log('received message', sse);
         const event: any = JSON.parse(sse.data);
         // Requiered zone to trigger angular view change
         // this._zone.run(() => this._events.next(event));
@@ -35,14 +30,12 @@ export class MessageService {
 
       // Trigger error on error
       eventSource.onerror = err => {
-        console.error('received error');
         subscriber.error(err);
       };
 
       // Override subscribe method to close the event source too
       const originalUsub = subscriber.unsubscribe;
       subscriber.unsubscribe = () => {
-        console.log('Unsubscribe');
         eventSource.close();
         originalUsub.call(subscriber);
       };

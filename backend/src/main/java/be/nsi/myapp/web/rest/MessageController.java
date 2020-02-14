@@ -33,6 +33,7 @@ public class MessageController {
         return Mono.just(new Message("Fake mono"));
     }
 
+    @CrossOrigin
     @PostMapping()
     public Message create(@RequestBody Message message) {
         return this.messageService.create(message);

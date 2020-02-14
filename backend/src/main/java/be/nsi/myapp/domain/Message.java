@@ -14,6 +14,8 @@ public class Message {
         this.content = content;
     }
 
+    // Fixme to investigate
+    // For mystic reasons, if I remove the getter/setter the mapping fail. Even with Lombock..
     public String getContent() {
         return content;
     }

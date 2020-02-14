@@ -1,6 +1,3 @@
-<h1>{{ 'hello-world' | translate }}</h1>
-<p>{{ 'test-key' | translate }}</p>
-
 <button *ngIf="sub" (click)="unsub()">Unsub</button>
 
 <div>
@@ -11,7 +8,12 @@
 </div>
 
 <div>
-    <p>Nouveau message :</p>
+    <p>Créer un message :</p>
     <input type="text" #contentInput />
     <button (click)="create(contentInput.value)">Create</button>
+</div>
+
+<div>
+    <p>Tous les messages reçus:</p>
+    <div *ngFor="let message of allMessages">{{ message.content }}</div>
 </div>

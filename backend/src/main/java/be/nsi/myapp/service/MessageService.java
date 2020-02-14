@@ -1,10 +1,8 @@
 package be.nsi.myapp.service;
 
-import be.nsi.myapp.domain.FakeMessageBuilder;
 import be.nsi.myapp.domain.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.EmitterProcessor;
@@ -22,35 +20,63 @@ public class MessageService {
 
     private List<Message> allMessages = new ArrayList<>();
 
-    private Thread loopThread;
     private int cnt = 0;
 
     public MessageService() {
         this.lastMessageEmitter = EmitterProcessor.create();
-        // Create a loop to fake create a message every second
-        this.loopThread = new FakeMessageBuilder(this.lastMessageEmitter);
 
-        this.lastMessageEmitter.subscribe(m -> {
-            this.log.info("Received : " + m.getContent());
-        });
-//        this.loopThread.start();
+        // By creating a subscription (and never unsubscribe from it) the flux will never close.
+//        this.lastMessageEmitter.subscribe(m -> this.log.info("Java sub : " + m.getContent()));
     }
 
+    /**
+     * Infinite loop to create message from java.
+     */
     @Scheduled(fixedRate = 1000)
-    public void infinitLoop() {
+    public void infiniteLoop() {
+        if (this.cnt == Integer.MAX_VALUE) {
+            this.cnt = 0;
+        }
         Message m = new Message("Infinite loop " + this.cnt++);
-        this.log.info(m.getContent());
         this.lastMessageEmitter.onNext(m);
     }
 
-    @Async
     public Flux<Message> getLastMessage$() {
-        return this.lastMessageEmitter;
+        // Log flux information
+        this.log.info("Cancelled : " + this.lastMessageEmitter.isCancelled());
+        this.log.info("Terminated : " + this.lastMessageEmitter.isTerminated());
+        this.log.info("Disposed : " + this.lastMessageEmitter.isDisposed());
+        this.log.info("Has error : " + this.lastMessageEmitter.hasError());
 
-//        return this.lastMessageEmitter.map(m -> {
-//            this.log.info("New message");
-//            return m;
-//        });
+        // Init the copy to the original flux
+        Flux<Message> copy = this.lastMessageEmitter;
+
+        /*
+         * Returning the emitter directly works.
+         * If the client close the connection the emmiter will be "cancelled".
+         * In this stage, if no other subscription exists the Flux will be closed and no other value will emit from it.
+         */
+        copy = this.lastMessageEmitter;
+
+        /*
+         * Map the value does not change the flux and does not return a new Flux either.
+         * Closing the connection will still close the Flux.
+         * Other subscription are not affected by this mapping.
+         */
+        copy = this.lastMessageEmitter.map(m -> {
+            this.log.info("New message mapped");
+            m.setContent("Mapped : " + m.getContent());
+            return m;
+        });
+        this.log.info("Does flux.map create a new Flux? " + (copy != this.lastMessageEmitter));
+
+        /*
+         * Flux.from does not create a new flux
+         */
+        copy = Flux.from(this.lastMessageEmitter);
+        this.log.info("Does Flux.from create a new Flux? " + (copy != this.lastMessageEmitter));
+
+        return copy;
 
 
 //        return this.lastMessageFlux;
