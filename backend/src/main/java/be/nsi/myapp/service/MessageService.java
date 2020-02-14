@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
+import reactor.util.function.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,20 @@ public class MessageService {
         copy = Flux.from(this.lastMessageEmitter);
         this.log.info("Does Flux.from create a new Flux? " + (copy != this.lastMessageEmitter));
 
+
+        /*
+         * Try to zip the Flux with itself. It does create a new Flux entity
+         * But the closing also close the original flux
+         */
+        copy = Flux.zip(this.lastMessageEmitter, this.lastMessageEmitter).map(Tuple2::getT1);
+        this.log.info("Does Flux.zip create a new Flux? " + (copy != this.lastMessageEmitter));
+
+        /*
+         * Create a transfer flux. But (currently) the new flux in rever unsubscribed tho don't do that.
+         */
+        copy = this.copy(this.lastMessageEmitter);
+        this.log.info("Does the copy method create a new Flux? " + (copy != this.lastMessageEmitter));
+
         return copy;
 
 
@@ -91,6 +106,21 @@ public class MessageService {
 //
 //        // Synchronise the interval and the message generator
 //        return Flux.zip(lastMessageFlux, durationFlux).map(Tuple2::getT1);
+    }
+
+    private <T> Flux<T> copy(Flux<T> original) {
+        return Flux.create(c -> {
+            original.subscribe(v -> {
+                this.log.info("Transfert a new value");
+                c.next(v);
+            }, e -> {
+                this.log.info("Transfert an error");
+                c.error(e);
+            }, () -> {
+                this.log.info("Transfert the complete");
+                c.complete();
+            });
+        });
     }
 
     public Message create(Message message) {
